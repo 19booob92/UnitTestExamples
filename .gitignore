@@ -4,3 +4,4 @@ mvnw.cmd
 bin/
 mvnw
 .mvn/
+.springBeans

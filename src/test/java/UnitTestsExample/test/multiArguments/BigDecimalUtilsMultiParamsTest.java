@@ -1,42 +1,32 @@
 package UnitTestsExample.test.multiArguments;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Collection;
 
 import static UnitTestsExample.utils.BigDecimalUtils.isNatualNumber;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Parameterized.class)
+@RunWith(JUnitParamsRunner.class)
 public class BigDecimalUtilsMultiParamsTest {
 
-	private boolean expectedResult;
-	private String param;
+	@Test
+	@Parameters(method = "validInputStringParameters")
+	public void shouldValidInputString(String stringValue, boolean expectedResult) {
 
-	public BigDecimalUtilsMultiParamsTest(String param, boolean expectedResult) {
-		this.expectedResult = expectedResult;
-		this.param = param;
+		boolean result = isNatualNumber(stringValue);
+
+		assertThat(expectedResult).isEqualTo(result);
 	}
 
 	@Parameters
-	public static Collection<Object[]> data() {
-		return asList(new Object[][]{
+	private Object[] validInputStringParameters() {
+		return new Object[][]{
 				{"asd", false},
 				{"1", true},
 				{"11", true},
 				{"1,1", false}
-		});
+		};
 	}
-
-	@Test
-	public void shouldValidInputString() {
-		boolean result = isNatualNumber(param);
-
-		assertThat(expectedResult).isEqualTo(result);
-	}
-	
 }

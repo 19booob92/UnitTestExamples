@@ -1,17 +1,19 @@
 package UnitTestsExample.test.statics;
 
-import org.junit.Assert;
+import UnitTestsExample.utils.StringUtils;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import UnitTestsExample.utils.StringUtils;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(StringUtils.class)
@@ -19,41 +21,47 @@ public class StaticsMethodsMockTest {
 
 	@Before
 	public void init() {
-		PowerMockito.mockStatic(StringUtils.class);
+		mockStatic(StringUtils.class);
 	}
 	
 	@Test
 	public void shouldReturnMultipliedGivenString() {
 		// given
-		Mockito.when(StringUtils.returnMultipliedString("Test", 3)).thenReturn("TestTestTest");
+		when(StringUtils.returnMultipliedString("Test", 3)).thenReturn("TestTestTest");
+
 		// when
 		String result = StringUtils.returnMultipliedString("Test", 3);
+
 		// then
-		Assert.assertEquals("TestTestTest", result);
+		assertThat(result).isEqualTo("TestTestTest");
 	}
 
 	@Test
 	public void shouldReturnMultipliedAnyString() {
 		// given
-		Mockito.when(StringUtils.returnMultipliedString(Matchers.anyString(), Matchers.anyInt()))
+		when(StringUtils.returnMultipliedString(anyString(), anyInt()))
 				.thenReturn("TestTestTest");
+
 		// when
 		String result = StringUtils.returnMultipliedString("AnyString", 5);
+
 		// then
-		Assert.assertEquals("TestTestTest", result);
+		assertThat(result).isEqualTo("TestTestTest");
 	}
 
 	@Test
 	public void verifyIfStaticMethodWasUsedFewTimesWithGivenArguments() {
 		// given
-		Mockito.when(StringUtils.returnMultipliedString(Matchers.anyString(), Matchers.anyInt()))
+		when(StringUtils.returnMultipliedString(anyString(), anyInt()))
 				.thenReturn("TestTestTest");
+
 		// when
 		StringUtils.returnMultipliedString("AnyString", 5);
 		StringUtils.returnMultipliedString("AnyString", 5);
 		StringUtils.returnMultipliedString("AnyString", 5);
+
 		// then
-		PowerMockito.verifyStatic(Mockito.times(3));
+		verifyStatic(times(3));
 	}
 
 }

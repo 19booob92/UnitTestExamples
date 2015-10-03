@@ -7,6 +7,9 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static java.lang.Integer.parseInt;
+import static org.apache.commons.lang3.RandomStringUtils.random;
+import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
@@ -27,38 +30,42 @@ public class StaticsMethodsMockTest {
 	@Test
 	public void shouldReturnMultipliedGivenString() {
 		// given
-		given(StringUtils.returnMultipliedString("Test", 3)).willReturn("TestTestTest");
+		String randomString = random(10);
+		String threeConcatenatedRandomStrings = randomString + randomString + randomString;
+		int repeat = 3;
+
+		given(StringUtils.returnMultipliedString(randomString, repeat)).willReturn(threeConcatenatedRandomStrings);
 
 		// when
-		String result = StringUtils.returnMultipliedString("Test", 3);
+		String result = StringUtils.returnMultipliedString(randomString, repeat);
 
 		// then
-		assertThat(result).isEqualTo("TestTestTest");
+		assertThat(result).isEqualTo(threeConcatenatedRandomStrings);
 	}
 
 	@Test
 	public void shouldReturnMultipliedAnyString() {
 		// given
+		String randomString = random(10);
+
 		given(StringUtils.returnMultipliedString(anyString(), anyInt()))
-				.willReturn("TestTestTest");
+				.willReturn(randomString);
 
 		// when
-		String result = StringUtils.returnMultipliedString("AnyString", 5);
+		String result = StringUtils.returnMultipliedString(random(10), parseInt(randomNumeric(5)));
 
 		// then
-		assertThat(result).isEqualTo("TestTestTest");
+		assertThat(result).isEqualTo(randomString);
 	}
 
 	@Test
 	public void verifyIfStaticMethodWasUsedFewTimesWithGivenArguments() {
 		// given
-		given(StringUtils.returnMultipliedString(anyString(), anyInt()))
-				.willReturn("TestTestTest");
 
 		// when
-		StringUtils.returnMultipliedString("AnyString", 5);
-		StringUtils.returnMultipliedString("AnyString", 5);
-		StringUtils.returnMultipliedString("AnyString", 5);
+		StringUtils.returnMultipliedString(random(10), parseInt(randomNumeric(5)));
+		StringUtils.returnMultipliedString(random(10), parseInt(randomNumeric(5)));
+		StringUtils.returnMultipliedString(random(10), parseInt(randomNumeric(5)));
 
 		// then
 		verifyStatic(times(3));

@@ -8,10 +8,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
@@ -27,7 +27,7 @@ public class StaticsMethodsMockTest {
 	@Test
 	public void shouldReturnMultipliedGivenString() {
 		// given
-		when(StringUtils.returnMultipliedString("Test", 3)).thenReturn("TestTestTest");
+		given(StringUtils.returnMultipliedString("Test", 3)).willReturn("TestTestTest");
 
 		// when
 		String result = StringUtils.returnMultipliedString("Test", 3);
@@ -39,8 +39,8 @@ public class StaticsMethodsMockTest {
 	@Test
 	public void shouldReturnMultipliedAnyString() {
 		// given
-		when(StringUtils.returnMultipliedString(anyString(), anyInt()))
-				.thenReturn("TestTestTest");
+		given(StringUtils.returnMultipliedString(anyString(), anyInt()))
+				.willReturn("TestTestTest");
 
 		// when
 		String result = StringUtils.returnMultipliedString("AnyString", 5);
@@ -52,8 +52,8 @@ public class StaticsMethodsMockTest {
 	@Test
 	public void verifyIfStaticMethodWasUsedFewTimesWithGivenArguments() {
 		// given
-		when(StringUtils.returnMultipliedString(anyString(), anyInt()))
-				.thenReturn("TestTestTest");
+		given(StringUtils.returnMultipliedString(anyString(), anyInt()))
+				.willReturn("TestTestTest");
 
 		// when
 		StringUtils.returnMultipliedString("AnyString", 5);
